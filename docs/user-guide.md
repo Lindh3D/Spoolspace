@@ -2,6 +2,10 @@
 
 Spoolspace keeps track of physical filament spools on your own computer. Open the same library from your Windows browser or a phone on your home Wi-Fi. This guide describes version 0.5.3, which uses HTTP by default.
 
+![Desktop inventory with sample filament stock](screenshots/inventory.png)
+
+All screenshots use an isolated demo library. The scan/template image is a synthetic label marked as sample data. Phone pictures show the responsive layout in a mobile-sized test browser.
+
 ## Start here
 
 1. Install the Windows setup EXE, or extract the portable ZIP and run `Spoolspace.exe`.
@@ -48,6 +52,8 @@ For a Home Screen shortcut:
 HTTP needs no certificate setup. Full browser-promoted PWA installation and service workers may be unavailable on HTTP; a Home Screen shortcut remains the intended default. If you used an older HTTPS bookmark or shortcut, replace it with the current HTTP address. Reserve the server's IP address in your router if you want that address to remain stable.
 
 ## Understand the inventory
+
+![A matching filament group with unopened stock and a separate opened roll](screenshots/grouped-spools.png)
 
 The main inventory shows filament identity, location, remaining grams and a remaining-weight bar. Search by brand, material or color; use material/stock filters and switch between grid and list views.
 
@@ -107,6 +113,8 @@ The empty-spool lookup can reuse a same-brand tare from your inventory and offer
 
 ## Scan a label with text and QR recognition
 
+![A scanned demo label remains beside the properties while the user reviews the spool](screenshots/scan-label.png)
+
 1. Choose **Scan spool**.
 2. Use **Choose photo** for an existing library image, or **Take photo** for camera capture. The browser controls the final picker options.
 3. A new upload automatically runs preparation, alignment, label zoom and the first read. A busy overlay shows the stage; let it finish.
@@ -153,6 +161,8 @@ Other supported links/identifiers can provide brand clues or match a locally cac
 
 ## Teach a reusable label template
 
+![Mapped brand, product, color and temperature fields in a label template](screenshots/label-template.png)
+
 Use a template when a readable label has a repeatable layout but generic recognition misses the useful fields.
 
 1. Open a label photo and choose **Teach this label**.
@@ -184,6 +194,8 @@ Your custom products are stored separately from the replaceable upstream cache. 
 
 ## Start one spool from a group and record a print
 
+![An individual spool with print-use and scale-weight forms](screenshots/spool-details.png)
+
 1. Open a matching filament group.
 2. Under **New, unused stock**, choose the physical spool using its location/ID.
 3. Choose **Start using one**. This marks it opened/in use without deducting any weight.
@@ -203,6 +215,8 @@ Choose **Find a spool for a print**, enter the slicer's estimated usage and allo
 Check the proposed material's suitability, drying condition and print settings yourself. Planning does not reserve stock or deduct grams; log the completed print afterward.
 
 ## Record storage and drying
+
+![Drying room with recorded storage and reminders](screenshots/drying-room.png)
 
 The **Drying room** uses your opening/drying dates, storage choice and material defaults to help prioritize checks. It is not a moisture sensor and does not control a dryer.
 

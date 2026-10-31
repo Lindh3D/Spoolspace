@@ -6,22 +6,107 @@ Spoolspace is a first prototype, with local SQLite storage, spool tracking, phot
 
 **[Read the step-by-step user guide](docs/user-guide.md)** for adding/scanning spools, label templates, groups, scale weighing, drying, phone access, Windows startup, slicer exports and backups.
 
-## Run on Windows
+**[Download Windows installer](https://github.com/Lindh3D/Spoolspace/releases/download/v0.5.3/Spoolspace-Setup-0.5.3-win-x64.exe)** · **[Download portable ZIP](https://github.com/Lindh3D/Spoolspace/releases/download/v0.5.3/Spoolspace-0.5.3-win-x64.zip)** · **[Release files and checksums](https://github.com/Lindh3D/Spoolspace/releases/tag/v0.5.3)**
 
-For a Windows setup EXE with its own runtime, desktop shortcut and optional background/service startup, see the [installation and release guide](docs/windows-installation.md). The same guide covers the portable ZIP, phone Home Screen installation, HTTPS and GitHub draft releases. Existing source users can export a backup and restore it after installing; your current project data folder is not moved or included in a release.
+![Spoolspace desktop inventory with filament colors, grouped spools, remaining-weight bars and drying reminders](docs/screenshots/inventory.png)
+
+Screenshots show the real app with a separate demonstration library. Names, stock and sample label images are illustrative; no personal inventory is included.
+
+## Install on Windows — no repository or coding needed
+
+Use the **EXE installer** or **portable ZIP** from [Releases](https://github.com/Lindh3D/Spoolspace/releases/tag/v0.5.3). These packages include Node.js, SQLite, offline OCR and the app's dependencies. **You do not need Git, npm, a repository checkout or a separate Node.js installation.**
+
+GitHub's green **Code → Download ZIP** button downloads developer source, not the ready-to-run Windows package. For the app, download one of the Windows files below.
+
+### Recommended: Windows installer
+
+1. Download **[Spoolspace-Setup-0.5.3-win-x64.exe](https://github.com/Lindh3D/Spoolspace/releases/download/v0.5.3/Spoolspace-Setup-0.5.3-win-x64.exe)** on a Windows 10/11 x64 computer.
+2. Run the EXE and follow the setup wizard. Administrator permission is required for installation and service/firewall configuration.
+3. Keep **Create a desktop shortcut** selected if you want easy access. Enable the **private local network** firewall option if a phone will connect to this computer.
+4. Choose how the server starts:
+
+   | Startup mode          | Behavior                                                                         |
+   | --------------------- | -------------------------------------------------------------------------------- |
+   | Manual                | Starts when you open the desktop shortcut                                        |
+   | Background at sign-in | Starts silently when a Windows user signs in                                     |
+   | Windows service       | Starts with the computer, even with nobody signed in; suitable for a home server |
+
+5. Finish setup and open **Spoolspace** from the desktop or Start menu. Your browser opens **http://localhost:4173**. HTTP is the default; no certificate setup is needed.
+6. Choose **Add spool**, or use **Scan a spool** to read a label and review its details before saving.
+
+Closing the browser leaves the server running. In manual/background mode, stop it from the Spoolspace notification-area menu → **Stop server and exit**. In service mode, manage the **Spoolspace** service in Windows Services. Your computer must stay running and awake for phone access.
+
+The installer is currently unsigned. Download it from this repository's Releases and use `SHA256SUMS.txt` to verify the file if desired; publisher signing is not included in this prototype.
+
+### Alternative: portable ZIP
+
+1. Download **[Spoolspace-0.5.3-win-x64.zip](https://github.com/Lindh3D/Spoolspace/releases/download/v0.5.3/Spoolspace-0.5.3-win-x64.zip)** from Releases.
+2. Right-click the ZIP and choose **Extract All** into a writable folder. Keep the extracted folders/files together; do not run the app from inside the ZIP.
+3. Run **Spoolspace.exe** from the extracted folder. It opens **http://localhost:4173**.
+4. Keep that launcher running while you use the app. Stop it through its notification-area menu when finished.
+
+Portable inventory is stored in the extracted folder's **data** directory. The portable copy does not install a Windows service or automatic sign-in startup; use the installer if you want those options. An installed and portable copy have separate inventories and should not run on the same port.
+
+### Update, move or back up the app
+
+- **Before updating:** use **Settings → Download backup**, then stop the tray server. Run the new installer over the existing installation. Installed-to-installed updates preserve your inventory and Windows startup choice.
+- **Moving from a source or portable copy:** export its JSON backup, stop the old server, install the app, then restore that backup in **Settings → Choose backup**. The installer does not automatically move another copy's data folder.
+- **Installed inventory:** normally `C:\ProgramData\Spoolspace`; configuration is `config.json` in that directory. Program files are separate. Uninstalling keeps the data directory.
+- **Portable inventory:** the `data` folder beside its `Spoolspace.exe`. To move the whole portable app, stop it first and copy the entire extracted folder, including `data`.
+- Replace old HTTPS bookmarks/phone shortcuts with the current HTTP address. Version 0.5.3 switches installed configurations back to HTTP.
 
 Installed Windows copies can change their startup mode in **Settings → Windows startup** on the server's localhost page. Choose manual, background at sign-in, or a Windows service at boot, then review/save in the Windows dialog with administrator permission. The choice takes effect at the next Windows startup while the current server keeps running. Phone clients can view the mode; changes are made on the Windows computer.
 
-Install **Node.js 24 LTS** from [nodejs.org](https://nodejs.org/). Open PowerShell in this folder and run:
+See the [detailed installation and hosting guide](docs/windows-installation.md) for configuration, migration, optional HTTPS and building your own release.
+
+## Run from source — for developers
+
+Skip this section if you downloaded the EXE or portable ZIP. For a source checkout, install **Node.js 24 or later** from [nodejs.org](https://nodejs.org/), open PowerShell in this project folder and run:
 
 ```powershell
-npm install
+npm ci
 npm start
 ```
 
 Open **http://localhost:4173**. HTTP is the default for your local network; no certificates are generated or needed. You can double-click `start.bat` after installing Node.js. Keep the server running while using the app; press `Ctrl+C` in its terminal to stop it. If using an older `.env` from 0.5.2, set `HTTPS_MODE=off` and restart.
 
 The initial dependency installation requires internet access. After installation, the interface, database, OCR engine, and English OCR language data run locally. There is no cloud AI account or API key to configure.
+
+## A look inside
+
+### Grouped stock and individual spool weights
+
+Matching unopened spools are collected together, while each opened spool keeps its own remaining grams and usage history. Open a group, choose a physical spool, then **Start using one**. After a print, log grams used or enter a new gross scale weight in the spool's details.
+
+| Matching spools, ready to open                                                                                    | Print usage and scale weighing                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| ![Filament group with three unused spools and one opened spool at 640 grams](docs/screenshots/grouped-spools.png) | ![Spool details with remaining weight, print-use entry and a total scale reading](docs/screenshots/spool-details.png) |
+
+### Scan a label, then review it
+
+Choose a photo or take one on your phone. Local OCR reads after automatic preparation; review the brand, polymer, product line, exact color and weight before saving. The reference image stays beside the editable properties. The image below uses a clearly marked synthetic demo label.
+
+![Recognized label photo beside the editable spool properties, including brand, PLA material and black color](docs/screenshots/scan-label.png)
+
+### Teach fields for a repeated label layout
+
+When a readable label is unfamiliar, select **Teach this label**, draw boxes around useful values, correct their text and save a template. Rotate, zoom and pan future photos underneath those fixed boxes. Saved layouts read the new label rather than copying the example spool's values.
+
+![Label template editor with separate boxes for brand, product line, color and print temperature](docs/screenshots/label-template.png)
+
+### Track storage and completed drying cycles
+
+Drying reminders use the recorded material, storage and dates. Log a cycle when it finishes and follow your filament/spool manufacturer's limits; the app does not measure moisture or control a dryer.
+
+![Drying room showing a reminder and stored spools with actions to log completed drying](docs/screenshots/drying-room.png)
+
+### Use the same inventory on your phone
+
+The phone layout and shortcut instructions below are captured from the responsive app in a mobile-sized test browser. They illustrate the interface, not verification of a particular phone's camera or OS installation dialog.
+
+| Phone inventory                                                                                                    | Add a Home Screen shortcut                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/screenshots/phone-inventory.png" width="300" alt="Spoolspace inventory in a narrow phone viewport"> | <img src="docs/screenshots/phone-shortcut.png" width="300" alt="HTTP phone setup instructions for Android and iPhone Home Screen shortcuts"> |
 
 ## Use your phone
 

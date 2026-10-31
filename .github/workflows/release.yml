@@ -37,4 +37,9 @@ jobs:
         shell: pwsh
         run: |
           $releaseFiles = @(Get-ChildItem -LiteralPath releases -File | Where-Object { $_.Name -match '^(Spoolspace-.*\.(exe|zip)|spoolspace-.*-source\.zip|SHA256SUMS\.txt)$' } | ForEach-Object { $_.FullName })
+          gh release view $env:RELEASE_TAG *> $null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Output "Release already exists; keeping its reviewed assets."
+            exit 0
+          }
           gh release create $env:RELEASE_TAG --draft --verify-tag --title "Spoolspace $env:RELEASE_TAG" --notes-file docs/release-notes.md @releaseFiles
