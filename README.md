@@ -4,6 +4,8 @@ A local filament inventory for your print room. Run one small server on a Window
 
 Spoolspace is a first prototype, with local SQLite storage, spool tracking, photo-assisted entry, drying records, and downloadable slicer presets. It runs independently of Bambu Studio, OrcaSlicer, and PrusaSlicer.
 
+**[Read the step-by-step user guide](docs/user-guide.md)** for adding/scanning spools, label templates, groups, scale weighing, drying, phone access, Windows startup, slicer exports and backups.
+
 ## Run on Windows
 
 For a Windows setup EXE with its own runtime, desktop shortcut and optional background/service startup, see the [installation and release guide](docs/windows-installation.md). The same guide covers the portable ZIP, phone Home Screen installation, HTTPS and GitHub draft releases. Existing source users can export a backup and restore it after installing; your current project data folder is not moved or included in a release.
@@ -135,7 +137,7 @@ The review shows decoded QR values, website brand hints, direct filament fields 
 
 Prusament's [official website](https://prusament.com/) describes spool QR links to manufacturing reports. Its opaque spool ID alone does not reveal the material or color offline. Official Prusament, Add-North and Bambu Lab domains provide brand clues; product identification still needs useful QR content, an exact catalog reference, or readable label text. Bambu's [AMS identification uses RFID](https://blog.bambulab.com/ams/); a printed QR does not expose the RFID tag contents. Actual Add-North and Bambu QR label formats have not been verified on physical spools.
 
-Manufacturer URLs are shown as optional **Open QR link (internet)** links. Spoolspace does not fetch those pages or send photos to them. Automatic manufacturer-page/API lookup is not implemented. A generic support/shop URL does not imply a particular product. Check the page manually when a code contains only a spool serial or unknown identifier.
+Manufacturer URLs are shown as optional **Open QR link (internet)** links. Generic manufacturer pages are not fetched automatically. A recognized Prusament single-spool link can optionally retrieve its official spool report when **Read Prusa spool details online** is enabled; only the spool ID is sent, and photos stay local. Original/factory weights never establish your current remaining balance. A generic support/shop URL does not imply a particular product. Check unsupported links manually when a code contains only a serial or unknown identifier.
 
 Decoded QR values are retained with the spool and included in inventory backups. New-spool remaining grams still require an explicit balance, a scale reading minus tare, or confirmation of a full spool. Recognition never adds inventory automatically. Turn off QR reading in the scan or template editor if the code is unrelated.
 
@@ -211,4 +213,4 @@ The interface uses HTML, CSS, and JavaScript served by a Node.js HTTP server. SQ
 
 You can publish this source to a GitHub repository under the included [MIT license](LICENSE). Review your files before pushing; exclude inventories, photos, backups, `.env`, and local model data. Dependency licenses remain their respective owners' licenses. Spoolspace is an independent community project and is not affiliated with the slicer or printer manufacturers.
 
-Possible next steps include printer usage import, a verified spool-weight catalog, QR labels, authenticated LAN access, and a packaged Windows installer.
+Possible next steps include printer usage import, a verified spool-weight catalog, QR labels and authenticated LAN access. A bundled Windows installer, portable package and release-building workflow are already included.
