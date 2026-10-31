@@ -8,6 +8,9 @@ permissions:
 jobs:
   windows:
     runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
     permissions:
       contents: write
     steps:
@@ -19,7 +22,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run check
-      - run: npm run build:windows
+      - name: Build Windows packages
+        run: ./scripts/build-windows.ps1
       - uses: actions/upload-artifact@v4
         with:
           name: spoolspace-windows

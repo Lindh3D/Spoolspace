@@ -85,6 +85,8 @@ For source installs, set `HTTPS_MODE=auto` to use `TLS_CERT_FILE`, `TLS_KEY_FILE
 
 On Windows, use Node.js 24+, `npm ci`, `npm test`, `npm run check`, then `npm run build:windows`. The build downloads pinned official Node and Inno Setup tools, verifies their SHA-256 values, and extracts the compiler in portable mode inside `tmp/toolchain`. Inno Setup is not installed system-wide. The .NET Framework compiler supplied by Windows builds the tray/service launcher. `npm run build:icons` regenerates icons from the existing SVG.
 
+GitHub Actions runs `./scripts/build-windows.ps1` directly in PowerShell 7 (`pwsh`); the local npm command uses Windows PowerShell without profiles or interactive prompts. SHA-256 hashing and ZIP extraction use .NET instead of autoloaded `Get-FileHash`/`Expand-Archive` commands. This avoids the missing-command failure caused by differing module paths when nesting PowerShell versions. After a workflow fix, run **Actions → Build Windows release → Run workflow → main** to use the updated code; rerunning an old tag's failed job uses that tag's original source.
+
 Outputs in `releases/`:
 
 - `Spoolspace-Setup-<version>-win-x64.exe`

@@ -13,7 +13,7 @@
     "test": "node --test test/*.test.mjs",
     "check": "node --check server.mjs && node --check public/app.js && node --check public/label-editor.js && node --check public/photo-alignment.js && node --check lib/ofd-catalog.mjs && node --check lib/ofd-match.mjs && node --check lib/ofd-client.mjs && node --check lib/qr.mjs && node --check lib/qr-worker.mjs && node --check lib/qr-evidence.mjs && node --check lib/brand-evidence.mjs && node --check lib/prusa-spool.mjs && node --check lib/qr-pixels.mjs && node --check public/pwa.js && node --check public/windows-startup.js && node --check lib/windows-startup.mjs && node --check lib/local-https.mjs && node --check lib/phone-setup.mjs && node --check lib/windows-http-default.mjs && node --check public/sw.js",
     "format": "prettier --write public server.mjs lib test package.json README.md docs",
-    "build:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-windows.ps1",
+    "build:windows": "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/build-windows.ps1",
     "build:icons": "node scripts/generate-icons.mjs",
     "docs:screenshots": "node scripts/capture-docs.mjs"
   },

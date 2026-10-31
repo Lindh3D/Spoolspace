@@ -1,5 +1,6 @@
 param([switch]$ToolsOnly)
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'windows-build-tools.ps1')
 $workspaceRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $toolchain = Get-Content -LiteralPath (Join-Path $workspaceRoot 'platform\windows\toolchain.json') -Raw | ConvertFrom-Json
 $package = Get-Content -LiteralPath (Join-Path $workspaceRoot 'package.json') -Raw | ConvertFrom-Json
@@ -10,12 +11,12 @@ $output = Join-Path $workspaceRoot 'releases'
 New-Item -ItemType Directory -Force -Path $toolRoot, $output | Out-Null
 function Fetch-Verified([string]$Url, [string]$Path, [string]$Hash) {
   if (!(Test-Path -LiteralPath $Path)) { Invoke-WebRequest -Uri $Url -OutFile $Path -UseBasicParsing }
-  if ((Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $Hash) { throw "Checksum mismatch: $Path. Remove the cached file and retry." }
+  if ((Get-FileSha256 -LiteralPath $Path) -ne $Hash) { throw "Checksum mismatch: $Path. Remove the cached file and retry." }
 }
 $runtimeZip = Join-Path $toolRoot "node-v$($toolchain.nodeVersion)-win-x64.zip"
 Fetch-Verified $toolchain.nodeUrl $runtimeZip $toolchain.nodeSha256
 $runtimeRoot = Join-Path $toolRoot "node-v$($toolchain.nodeVersion)-win-x64"
-if (!(Test-Path -LiteralPath (Join-Path $runtimeRoot 'node.exe'))) { Expand-Archive -LiteralPath $runtimeZip -DestinationPath $toolRoot -Force }
+if (!(Test-Path -LiteralPath (Join-Path $runtimeRoot 'node.exe'))) { Expand-BuildArchive -LiteralPath $runtimeZip -DestinationPath $toolRoot }
 $compilerRoot = Join-Path $toolRoot "inno-$($toolchain.innoVersion)"
 $compiler = Join-Path $compilerRoot 'ISCC.exe'
 if (!(Test-Path -LiteralPath $compiler)) {
@@ -55,7 +56,6 @@ Copy-Item -LiteralPath (Join-Path $workspaceRoot 'platform\windows\config.exampl
 if ($LASTEXITCODE -ne 0) { throw 'Packaged runtime verification failed.' }
 & $compiler /Qp "/DAppVersion=$($package.version)" "/DStageDir=$stage" "/DReleaseDir=$output" (Join-Path $workspaceRoot 'platform\windows\installer.iss')
 if ($LASTEXITCODE -ne 0) { throw 'Installer compilation failed.' }
-Add-Type -AssemblyName System.IO.Compression.FileSystem
 $portable = Join-Path $output "Spoolspace-$($package.version)-win-x64.zip"
 if (Test-Path -LiteralPath $portable) { Remove-Item -LiteralPath $portable -Force }
 [IO.Compression.ZipFile]::CreateFromDirectory($stage, $portable, [IO.Compression.CompressionLevel]::Optimal, $false)
@@ -66,6 +66,6 @@ $sourceZip = Join-Path $output "spoolspace-$($package.version)-source.zip"
 if (Test-Path -LiteralPath $sourceZip) { Remove-Item -LiteralPath $sourceZip -Force }
 [IO.Compression.ZipFile]::CreateFromDirectory($sourceRoot, $sourceZip, [IO.Compression.CompressionLevel]::Optimal, $false)
 $artifacts = @((Join-Path $output "Spoolspace-Setup-$($package.version)-win-x64.exe"), $portable, $sourceZip)
-$checksums = $artifacts | ForEach-Object { "{0}  {1}" -f (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant(), [IO.Path]::GetFileName($_) }
+$checksums = $artifacts | ForEach-Object { "{0}  {1}" -f (Get-FileSha256 -LiteralPath $_), [IO.Path]::GetFileName($_) }
 [IO.File]::WriteAllLines((Join-Path $output 'SHA256SUMS.txt'), $checksums, [Text.UTF8Encoding]::new($false))
 Write-Output ($artifacts -join "`n")
