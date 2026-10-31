@@ -1,0 +1,8 @@
+{
+  "nodeVersion": "24.22.2",
+  "nodeUrl": "https://nodejs.org/dist/v24.22.2/node-v24.22.2-win-x64.zip",
+  "nodeSha256": "ca1bff5d8ead13c9f2ea404a176db46bd430704d5b5113734049fa365e7799e2",
+  "innoVersion": "7.1.1",
+  "innoUrl": "https://github.com/jrsoftware/issrc/releases/download/is-7_1_1/innosetup-7.1.1-x64.exe",
+  "innoSha256": "8a5a6711c3766a6e5fb74f280ba0e3551e719ce94538d901fdbd1f8f9920b3f0"
+}

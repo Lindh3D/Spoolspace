@@ -1,0 +1,33 @@
+{
+  "name": "spoolspace",
+  "version": "0.5.3",
+  "private": true,
+  "description": "Local-first filament inventory with offline label recognition and slicer profile exports",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "dev": "node --env-file-if-exists=.env --watch server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/label-editor.js && node --check public/photo-alignment.js && node --check lib/ofd-catalog.mjs && node --check lib/ofd-match.mjs && node --check lib/ofd-client.mjs && node --check lib/qr.mjs && node --check lib/qr-worker.mjs && node --check lib/qr-evidence.mjs && node --check lib/brand-evidence.mjs && node --check lib/prusa-spool.mjs && node --check lib/qr-pixels.mjs && node --check public/pwa.js && node --check public/windows-startup.js && node --check lib/windows-startup.mjs && node --check lib/local-https.mjs && node --check lib/phone-setup.mjs && node --check lib/windows-http-default.mjs && node --check public/sw.js",
+    "format": "prettier --write public server.mjs lib test package.json README.md docs",
+    "build:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-windows.ps1",
+    "build:icons": "node scripts/generate-icons.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.13",
+    "@peculiar/x509": "3.1.0",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4",
+    "reflect-metadata": "0.2.2",
+    "tesseract.js": "^6.0.1"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "prettier": "^3.9.10"
+  }
+}

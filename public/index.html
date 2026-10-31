@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#172a27" />
+    <meta
+      name="description"
+      content="Your local filament library. Track spools, plan drying, and prepare your next print."
+    />
+    <title>Spoolspace — Your filament, in order.</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Spoolspace" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/photo-alignment.js" defer></script>
+    <script src="/label-editor.js" defer></script>
+    <script src="/pwa.js" defer></script>
+    <script src="/windows-startup.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="boot">
+        <div class="brand-mark">s</div>
+        <p>Opening your filament library…</p>
+      </div>
+    </div>
+    <dialog id="modal" aria-labelledby="dialog-title"></dialog>
+    <div id="toasts" role="status" aria-live="polite"></div>
+  </body>
+</html>

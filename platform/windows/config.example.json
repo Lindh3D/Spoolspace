@@ -1,0 +1,10 @@
+{
+  "port": 4173,
+  "host": "0.0.0.0",
+  "dataDir": "%ProgramData%\\Spoolspace",
+  "httpsPort": 4174,
+  "httpsMode": "off",
+  "tlsCertFile": "",
+  "tlsKeyFile": "",
+  "allowedHosts": []
+}

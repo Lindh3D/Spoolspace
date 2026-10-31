@@ -1,0 +1,40 @@
+name: Build Windows release
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24.22.2"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+      - run: npm run build:windows
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spoolspace-windows
+          path: |
+            releases/Spoolspace-*.exe
+            releases/Spoolspace-*.zip
+            releases/spoolspace-*-source.zip
+            releases/SHA256SUMS.txt
+          if-no-files-found: error
+      - name: Create draft release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: pwsh
+        run: |
+          $releaseFiles = @(Get-ChildItem -LiteralPath releases -File | Where-Object { $_.Name -match '^(Spoolspace-.*\.(exe|zip)|spoolspace-.*-source\.zip|SHA256SUMS\.txt)$' } | ForEach-Object { $_.FullName })
+          gh release create $env:RELEASE_TAG --draft --verify-tag --title "Spoolspace $env:RELEASE_TAG" --notes-file docs/release-notes.md @releaseFiles
